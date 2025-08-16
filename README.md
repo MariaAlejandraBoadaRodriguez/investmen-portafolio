@@ -3,6 +3,9 @@
 This project implements a **full-stack system** for portfolio optimization using both classical and quantum methods.  
 The **backend** is built with **FastAPI** and leverages **PennyLane** to simulate quantum algorithms such as **QAOA** and **VQA**, alongside a classical heuristic baseline (**Simulated Annealing**).
 
+
+![alt text](image-5.png)
+
 ---
 
 ## 🔹 Backend
@@ -96,3 +99,46 @@ The framework then outputs:
 6. In summary
 
 We translate the portfolio optimization problem into a binary combinatorial model (QUBO), which can be tackled by quantum-inspired heuristics or quantum algorithms. This bridges traditional finance with cutting-edge quantum optimization.
+
+## 🔹 Frontend
+
+### 🎨 Frontend (Vite + React)
+
+A lightweight SPA built with Vite + React that lets a user:
+
+* Pick up to 7 tickers from the loaded universe
+* Set an investment budget in USD
+* Choose the discretization (q, B_units) and hyper-parameters (lam_risk, lam_ret, lam_budget)
+* Run three solvers (SA, QAOA, VQA) via the backend and compare recommended allocations
+* See per-model allocations, weights, USD amounts, and summary metrics (expected return, volatility, cost)
+
+### 🧱 Tech Stack
+
+* Vite for fast dev/build
+* React 18 (functional components + hooks)
+* Fetch API for HTTP calls
+* Vanilla CSS (see styles.css) — easy to swap to Tailwind/Chakra later
+
+### 📁 Project Structure
+
+frontend/
+├─ components/
+│  ├─ Controls.jsx     
+│  ├─ TickerGallery.jsx  
+│  └─ Footer.jsx          
+├─ src/
+│  ├─ App.jsx             
+│  └─ main.jsx          
+├─ styles.css         
+├─ index.html            
+├─ vite.config.js
+├─ package.json
+└─ .env / .env.production 
+
+### ▶️ Run & Build
+
+npm install
+npm run dev      
+npm run build    
+npm run preview 
+
