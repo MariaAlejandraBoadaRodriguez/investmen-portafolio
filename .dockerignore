@@ -1,0 +1,11 @@
+# No metas cosas innecesarias en la imagen
+.git
+.gitignore
+**/__pycache__/
+**/*.pyc
+.vscode
+.DS_Store
+venv
+.venv
+node_modules
+frontend
