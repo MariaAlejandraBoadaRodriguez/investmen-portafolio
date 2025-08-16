@@ -4,7 +4,7 @@ This project implements a **full-stack system** for portfolio optimization using
 The **backend** is built with **FastAPI** and leverages **PennyLane** to simulate quantum algorithms such as **QAOA** and **VQA**, alongside a classical heuristic baseline (**Simulated Annealing**).
 
 
-![alt text](image-5.png)
+![alt text](./img/image-5.png)
 
 ---
 
@@ -39,12 +39,12 @@ This project combines modern portfolio theory, discrete optimization, and quantu
     * Annualized Returns (μ)
     Computed from the log-returns of adjusted closing prices:
 
-    ![alt text](image.png)
+    ![alt text](./img/image.png)
 
     * Covariance Matrix (Σ):
     Estimated from the daily returns and scaled by 252 to reflect annual risk.
 
-    ![alt text](image-1.png)
+    ![alt text](./img/image-1.png)
 
     These form the basis for measuring expected return and risk
 
@@ -61,7 +61,7 @@ To avoid combinatorial explosion when M (number of available assets) is large, w
 The portfolio allocation is cast as a Quadratic Unconstrained Binary Optimization (QUBO) problem.
 Each asset i is represented with q binary variables encoding discrete weight units (binary expansion):
 
-![alt text](image-2.png)
+![alt text](./img/image-2.png)
 
 Where:
 
@@ -71,7 +71,7 @@ Where:
 
 Final objective:
 
-![alt text](image-3.png)
+![alt text](./img/image-3.png)
 
 4. Solvers
 
@@ -85,7 +85,7 @@ The QUBO can be solved by:
 
 The solution vector b is decoded into portfolio weights:
 
-![alt text](image-4.png)
+![alt text](./img/image-4.png)
 
 where A is the binary expansion matrix.
 
