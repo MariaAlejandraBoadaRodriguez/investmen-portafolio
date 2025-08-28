@@ -1,8 +1,18 @@
 :root{
-  --bg:#0b1220; --text:#e9f0ff;
-  --badge-bg:#ffffff; --badge-ink:#0e1a38; --badge-border:#e6eaf5; --badge-hover:#f3f6ff;
-}
+  --bg:#0b1220; 
+  --text:#e9f0ff;
 
+  /* NUEVAS (faltaban y las usa tu UI) */
+  --card:#0e172b; 
+  --accent:#6aa3ff; 
+  --muted:#98a2b3;
+
+  /* Badges */
+  --badge-bg:#ffffff; 
+  --badge-ink:#0e1a38; 
+  --badge-border:#e6eaf5; 
+  --badge-hover:#f3f6ff;
+}
 *{box-sizing:border-box}
 
 /* --- hace que el footer quede al fondo --- */
@@ -113,4 +123,101 @@ body{
 @media (max-width:980px){
   .grid{grid-template-columns:1fr;gap:12px}
   .scroll{height:auto;max-height:62vh}
+}
+
+/* ===== StepsGuideAck (namespaced; estilos solo en App) ===== */
+.sg-wrap{
+  width:100%;
+  background: linear-gradient(180deg, #101826, #0d1522);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sg-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 16px;
+  overflow-x:auto;
+  scrollbar-width: thin;
+}
+.sg-inner::-webkit-scrollbar{height:6px}
+.sg-inner::-webkit-scrollbar-thumb{background:#2b3750;border-radius:4px}
+
+.sg-card{
+  flex:1 0 280px;
+  background:#0f1a2b;                 /* usa tu paleta */
+  border:1px solid #1f2c44;
+  border-radius:14px;
+  padding:10px 12px;
+  box-shadow:0 1px 2px rgba(16,24,40,.06);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.sg-card:hover{ transform: translateY(-1px); border-color:#2f4368; }
+.sg-card.ok{
+  background:#0d231a;                 /* cambiado a verde al confirmar */
+  border-color:#1b6e47;
+}
+
+.sg-head{ display:flex; align-items:center; gap:10px; }
+.sg-dot{
+  width:30px; height:30px; border-radius:50%;
+  display:grid; place-items:center; font-weight:700;
+  color:#fff; background:#7ea6e0; box-shadow: inset 0 2px 0 rgba(0,0,0,.08);
+}
+.sg-dot.ok{ background:#2db36a; }
+
+.sg-titles{ min-width:175px; }
+.sg-title{ color:#e5ecf8; font-weight:700; line-height:1; }
+.sg-desc{ color:#b7c2d8; font-size:13px; margin-top:2px; }
+
+.sg-btn{
+  background:#1b2b47; color:#e9f1ff; border:1px solid #2c4169;
+  border-radius:10px; padding:6px 10px; font-weight:600; cursor:pointer;
+}
+.sg-btn.ok{
+  background:#2db36a; border-color:#208f52; color:#0b1b14;
+}
+
+.sg-arrow{
+  color:#f0a229; font-weight:800; font-size:20px; user-select:none;
+}
+
+.sg-right{ margin-left:auto; }
+.sg-btn-ghost{
+  border:1px dashed #3a4c70; color:#cfd9ee; background:transparent;
+  border-radius:10px; padding:6px 10px; cursor:pointer;
+}
+.sg-btn-ghost:hover{ border-style:solid; }
+
+/* Responsive: cards más compactas en pantallas chicas */
+@media (max-width:980px){
+  .sg-card{ flex-basis:240px; }
+}
+
+.confetti-msg {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2db36a;
+  color: #fff;
+  padding: 16px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  z-index: 9999;
+  animation: fadeInOut 4s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.8); }
+  10% { opacity: 1; transform: translateX(-50%) scale(1); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-50%) scale(0.9); }
 }

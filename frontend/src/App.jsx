@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TickerGallery from "../components/TickerGallery"; 
 import Controls from "../components/Controls";
 import Footer from "../components/Footer";
+import StepsGuideAck from "../components/StepsGuideAck";
 import "./styles.css";
 
 export default function App(){
@@ -10,7 +11,10 @@ export default function App(){
     <div>
       <header className="header">
         <div className="container">
-          <div className="title">Investment Portfolio Optimization</div>
+          <div className="title">Optimización de Cartera de Inversión con Simulación Cuántica</div>
+        </div>
+        <div>
+            <StepsGuideAck />
         </div>
       </header>
 

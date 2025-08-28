@@ -10,6 +10,11 @@ export default function Controls({ selection }) {
   const [result, setResult] = useState(null);
   const disabled = loading || k < 1 || k > 7 || budget <= 0;
 
+    // Helpers
+  const USD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const toUsd = (x) => (typeof x === "number" ? USD.format(x) : "—");
+  const toPct = (x) => (typeof x === "number" ? `${(x * 100).toFixed(1)}%` : "—");
+
   const handleOptimize = async () => {
     setLoading(true);
     setResult(null);
@@ -84,14 +89,15 @@ export default function Controls({ selection }) {
           <div className="kicker">
             Resultado{result.method ? ` (${result.method})` : ""}
           </div>
+
           <ul>
             {result.selected?.map((a) => (
               <li key={a.ticker}>
-                {a.ticker}: {(a.weight * 100).toFixed(2)}% → $
-                {a.amount_usd.toLocaleString()}
+                {a.ticker}: {(a.weight * 100).toFixed(2)}% → {toUsd(a.amount_usd)}
               </li>
             ))}
           </ul>
+
           <div className="small">
             Ret. anual esp.:{" "}
             {typeof result.expected_annual_return === "number"
@@ -104,6 +110,46 @@ export default function Controls({ selection }) {
             • C (QUBO):{" "}
             {typeof result.C === "number" ? result.C.toFixed(3) : "—"}
           </div>
+
+          {/* —— Análisis para el cliente —— */}
+          <details className="explain" style={{ marginTop: 12 }}>
+            <summary><strong>¿Cómo interpretar el resultado?</strong></summary>
+            <div style={{ marginTop: 8, lineHeight: 1.4 }}>
+              <p>
+                <strong>Asignación sugerida.</strong> Los porcentajes son los <em>pesos</em> en la cartera,
+                y la flecha “→” indica el <em>monto en dólares</em> a invertir en cada acción según tu
+                presupuesto total ({toUsd(result.total_budget_usd)}).
+              </p>
+
+              <p>
+                <strong>SA</strong> = <em>Simulated Annealing</em> (recocido simulado): algoritmo que explora muchas
+                combinaciones y se queda con la que <em>minimiza</em> la función objetivo del modelo.
+              </p>
+
+              <p>
+                <strong>Retorno anual esperado</strong> (ret. anual esp.) es la rentabilidad media estimada
+                de la cartera en un año (no garantizada): <strong>{toPct(result.expected_annual_return)}</strong>.
+              </p>
+
+              <p>
+                <strong>Volatilidad anual esperada</strong> (vol. anual esp.) es una medida de <em>riesgo</em>
+                o variabilidad: <strong>{toPct(result.expected_annual_vol)}</strong>. Valores más altos implican
+                más oscilaciones posibles.
+              </p>
+
+              <p>
+                <strong>C (QUBO)</strong> es el valor de la función objetivo del problema
+                <em> Quadratic Unconstrained Binary Optimization</em>. En este análisis fue{" "}
+                <strong>{typeof result.C === "number" ? result.C.toFixed(3) : "—"}</strong>.{" "}
+                En la práctica: <em>mientras más bajo (más negativo), mejor</em> el equilibrio
+                retorno-riesgo bajo las restricciones.
+              </p>
+
+              <p className="small">
+                Nota: las cifras son estimaciones históricas y no garantizan resultados futuros.
+              </p>
+            </div>
+          </details>
         </div>
       )}
 
