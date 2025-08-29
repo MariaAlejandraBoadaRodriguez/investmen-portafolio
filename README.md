@@ -77,7 +77,7 @@ Before building the QUBO, an exact preselection of 𝑀=𝑘 assets is applied f
 
 A QUBO is a way to translate the portfolio selection problem into math that only uses zeros and ones. It combines three things: keeping the investment from being too risky, aiming for good returns, and respecting the budget limit. To do this, it turns the possible weights of each asset into small binary pieces and builds a big matrix where each number shows how risk, return, and budget interact. In the end, solving the QUBO means finding the combination of zeros and ones that minimizes the “total cost” and gives the best possible portfolio under those rules.
 
-4. Solvers
+4. Results
 
 The result of this process is an optimized portfolio that specifies which assets should be selected, what proportion of money should be allocated to each, and the corresponding dollar amount. In addition, the model calculates the expected annual return and the annual volatility of the portfolio, providing insight into both the potential performance and the level of risk involved.
 
