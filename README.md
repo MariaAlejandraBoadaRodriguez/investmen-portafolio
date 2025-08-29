@@ -8,8 +8,9 @@ The **backend** is built with **FastAPI** and leverages **PennyLane** to simulat
 https://investmen-portafolio.vercel.app/
 
 
-![alt text](./img/image-5.png)
+![alt text](./img/image-3.png)
 
+![alt text](./img/image-4.png)
 ---
 
 ## 🔹 Backend
@@ -41,68 +42,48 @@ This project combines modern portfolio theory, discrete optimization, and quantu
 1. Financial Statistics
 
     * Annualized Returns (μ)
-    Computed from the log-returns of adjusted closing prices:
+    - First, we calculate the average daily return (the mean of daily log-returns).
+    - Then, we scale it by the approximate number of trading days in a year: 252. (In practice, there are usually between 250 and 255, but 252 is the common standard).
 
-    ![alt text](./img/image.png)
+    ![alt text](./img/image-1.png)
+
+    This works because log-returns are additive. For example, if on average you earn 0.05% per day, the expected annual return would be:
+
+    0.05% x 252 = 12.6%
 
     * Covariance Matrix (Σ):
     Estimated from the daily returns and scaled by 252 to reflect annual risk.
 
-    ![alt text](./img/image-1.png)
+    - Each asset has a vector of daily returns.
+    - We calculate how these returns move together → that is the covariance.
 
-    These form the basis for measuring expected return and risk
+    ![alt text](./img/image-2.png)
 
+    - The diagonal Σii is the variance of asset i → it measures its volatility.
+    - The off-diagonal elements Σ𝑖𝑗 indicate whether assets tend to:
+        * Move up/down together (positive correlation)
+        * Move in opposite directions (negative correlation)
+
+    - To scale it to one year, just like with returns, we multiply the daily covariance by 252
+    
 2. Preselection of Assets
 
-To avoid combinatorial explosion when M (number of available assets) is large, we preselect exactly k assets using heuristics:
-  
-   * Sharpe ratio → maximize risk-adjusted return.
-   * High-return filter → pick assets with largest μ
-   * Low-volatility & correlation (default) → pick assets that reduce redundancy and total variance.
+To avoid combinatorial explosion when 𝑀 (the number of available assets) is large, we preselect exactly 𝑘 assets using simple heuristics:
+
+    * Sharpe ratio → choose assets with the highest risk-adjusted return.
+    * High-return filter → pick the assets with the largest expected return 𝜇.
+    * Low-volatility & correlation (default) → select assets that minimize redundancy and overall variance, improving diversification.
+Before building the QUBO, an exact preselection of 𝑀=𝑘 assets is applied from the universe of tickers. This helps reduce the size of the QUBO problem (fewer assets → fewer bits) and improves the quality of the optimization by avoiding redundant or highly correlated assets.
 
 3. QUBO Formulation
 
-The portfolio allocation is cast as a Quadratic Unconstrained Binary Optimization (QUBO) problem.
-Each asset i is represented with q binary variables encoding discrete weight units (binary expansion):
-
-![alt text](./img/image-2.png)
-
-Where:
-
-* q: number of bits per asset
-* B: total units available (budget granularity)
-* bik : binary decision variables
-
-Final objective:
-
-![alt text](./img/image-3.png)
+A QUBO is a way to translate the portfolio selection problem into math that only uses zeros and ones. It combines three things: keeping the investment from being too risky, aiming for good returns, and respecting the budget limit. To do this, it turns the possible weights of each asset into small binary pieces and builds a big matrix where each number shows how risk, return, and budget interact. In the end, solving the QUBO means finding the combination of zeros and ones that minimizes the “total cost” and gives the best possible portfolio under those rules.
 
 4. Solvers
 
-The QUBO can be solved by:
+The result of this process is an optimized portfolio that specifies which assets should be selected, what proportion of money should be allocated to each, and the corresponding dollar amount. In addition, the model calculates the expected annual return and the annual volatility of the portfolio, providing insight into both the potential performance and the level of risk involved.
 
-* Simulated Annealing (SA) → fast, classical stochastic optimization.
-* Quantum Approximate Optimization Algorithm (QAOA) (via PennyLane) → hybrid quantum-classical variational solver.
-* Variational Quantum Algorithms (VQA) (future extension) → explore richer ansatz beyond QAOA.
-
-5. Interpretation of Results
-
-The solution vector b is decoded into portfolio weights:
-
-![alt text](./img/image-4.png)
-
-where A is the binary expansion matrix.
-
-The framework then outputs:
-
-* Selected assets (tickers)
-* Optimal weights (𝑤𝑖)
-* Investment amounts in USD
-* Portfolio metrics (expected return, volatility, cost function 𝐶)
-
-6. In summary
-
-We translate the portfolio optimization problem into a binary combinatorial model (QUBO), which can be tackled by quantum-inspired heuristics or quantum algorithms. This bridges traditional finance with cutting-edge quantum optimization.
+Along with this, the model outputs the minimum value of the QUBO cost function (C), which reflects how well the balance between risk, return, and budget was achieved. In other words, the final result is a diversified, quantitatively justified portfolio that aims to find the best trade-off between maximizing returns and minimizing risk under the defined constraints.
 
 ## 🔹 Frontend
 
